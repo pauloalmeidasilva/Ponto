@@ -9,11 +9,18 @@
 <div class="card">
     <form action="<?= isset($servidor) ? base_url('servidores/atualizar/'.$servidor->id) : base_url('servidores/salvar') ?>" method="POST">
         <div class="form-row">
-            <div class="form-group">
+            <div class="form-group" style="flex: 1;">
+                <label>Tipo de Servidor</label>
+                <select name="tipo" class="form-control" required>
+                    <option value="apoio" <?= (isset($servidor) && $servidor->tipo == 'apoio') ? 'selected' : '' ?>>Quadro de Apoio</option>
+                    <option value="docente" <?= (isset($servidor) && $servidor->tipo == 'docente') ? 'selected' : '' ?>>Docente (Professor)</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex: 1;">
                 <label>Matrícula</label>
                 <input type="text" name="matricula" class="form-control" value="<?= isset($servidor) ? esc($servidor->matricula) : '' ?>">
             </div>
-            <div class="form-group">
+            <div class="form-group" style="flex: 2;">
                 <label>Nome Completo</label>
                 <input type="text" name="nome" class="form-control" value="<?= isset($servidor) ? esc($servidor->nome) : '' ?>" required>
             </div>

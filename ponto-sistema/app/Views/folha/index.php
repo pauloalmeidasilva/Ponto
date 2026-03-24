@@ -9,15 +9,52 @@
     <form action="<?= base_url('folha/imprimir') ?>" method="POST" target="_blank">
         
         <div class="form-group">
+            <label>Tipo de Livro Ponto</label>
+            <div style="display: flex; gap: 20px; margin-bottom: 10px;">
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <input type="radio" name="tipo_folha" value="apoio" checked onchange="filterServidores('apoio')"> Quadro de Apoio
+                </label>
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <input type="radio" name="tipo_folha" value="docente" onchange="filterServidores('docente')"> Docente (Professor)
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
             <label>Selecione o Servidor</label>
-            <select name="servidor_id" class="form-control" required>
+            <select name="servidor_id" id="servidor_id" class="form-control" required>
                 <option value="">-- Selecione --</option>
-                <option value="todos">TODOS OS SERVIDORES</option>
+                <option value="todos">TODOS OS SERVIDORES DESTE TIPO</option>
                 <?php foreach($servidores as $s): ?>
-                    <option value="<?= $s->id ?>"><?= esc($s->nome) ?> (<?= esc($s->matricula) ?>)</option>
+                    <option value="<?= $s->id ?>" data-tipo="<?= $s->tipo ?>"><?= esc($s->nome) ?> (<?= esc($s->matricula) ?>)</option>
                 <?php endforeach; ?>
             </select>
         </div>
+
+        <script>
+            function filterServidores(tipo) {
+                const select = document.getElementById('servidor_id');
+                const options = select.options;
+                
+                // Reset selection
+                select.value = "";
+
+                for (let i = 0; i < options.length; i++) {
+                    const option = options[i];
+                    const dataTipo = option.getAttribute('data-tipo');
+                    
+                    if (option.value === "" || option.value === "todos") {
+                        option.style.display = "block";
+                    } else if (dataTipo === tipo) {
+                        option.style.display = "block";
+                    } else {
+                        option.style.display = "none";
+                    }
+                }
+            }
+            // Initial filter
+            window.onload = () => filterServidores('apoio');
+        </script>
 
         <div class="form-row">
             <div class="form-group">

@@ -12,7 +12,7 @@ class Servidor extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'matricula', 'nome', 'cargo_funcao', 'rg', 'ch_semanal', 
+        'matricula', 'nome', 'tipo', 'cargo_funcao', 'rg', 'ch_semanal', 
         'horario_padrao', 'local_id', 'plantao', 'estudante', 'almoco'
     ];
 

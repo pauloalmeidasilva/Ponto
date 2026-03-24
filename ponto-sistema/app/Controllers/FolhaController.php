@@ -26,6 +26,7 @@ class FolhaController extends BaseController
     public function imprimir()
     {
         $servidor_id = $this->request->getPost('servidor_id');
+        $tipo_folha = $this->request->getPost('tipo_folha') ?? 'apoio';
         $mes = (int)$this->request->getPost('mes');
         $ano = (int)$this->request->getPost('ano');
 
@@ -37,7 +38,11 @@ class FolhaController extends BaseController
         $pontos_facultativos = array_map('trim', explode(',', $facultativos_input ?? ''));
 
         if ($servidor_id === 'todos') {
-            $servidores = $this->servidorModel->getAllWithLocal();
+            $servidores = $this->servidorModel->select('servidores.*, locais.secretaria, locais.escola_local')
+                                            ->join('locais', 'locais.id = servidores.local_id', 'left')
+                                            ->where('servidores.tipo', $tipo_folha)
+                                            ->orderBy('servidores.nome', 'ASC')
+                                            ->findAll();
         }
         else {
             $servidor = $this->servidorModel->getServidorWithLocal($servidor_id);
@@ -85,6 +90,7 @@ class FolhaController extends BaseController
 
         $data = [
             'servidores' => $servidores,
+            'tipo_folha' => $tipo_folha,
             'mes_numero' => str_pad($mes, 2, '0', STR_PAD_LEFT),
             'mes_nome' => $meses[$mes] ?? '',
             'ano' => $ano,

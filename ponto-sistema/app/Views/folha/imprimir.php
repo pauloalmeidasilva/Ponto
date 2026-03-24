@@ -189,6 +189,135 @@
 
 <body onload="window.print()">
     <?php foreach ($servidores as $servidor): ?>
+    
+    <?php if (($tipo_folha ?? 'apoio') === 'docente'): ?>
+    <!-- LAYOUT DOCENTE -->
+    <div class="page docente-page">
+        <style>
+            .docente-page { font-size: 9px; }
+            .docente-header { text-align: center; border-bottom: 2px solid #000; margin-bottom: 10px; }
+            .docente-header h1 { font-size: 14px; margin: 0; }
+            .docente-header h2 { font-size: 11px; margin: 2px 0; }
+            
+            .info-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; border: 1px solid #000; margin-bottom: 10px; }
+            .info-item { border: 0.5px solid #000; padding: 2px 5px; }
+            .info-label { font-weight: bold; text-transform: uppercase; font-size: 8px; display: block; }
+            
+            .main-content { display: flex; gap: 10px; flex: 1; }
+            .freq-table { flex: 3; }
+            .side-tables { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+            
+            .freq-table table { width: 100%; border-collapse: collapse; border: 2px solid #000; }
+            .freq-table th, .freq-table td { border: 1px solid #000; padding: 2px; text-align: center; font-size: 8px; }
+            .freq-table th { background: #f0f0f0; }
+            
+            .side-table { border: 1px solid #000; }
+            .side-table-title { background: #000; color: #fff; text-align: center; font-weight: bold; padding: 2px; font-size: 9px; }
+            .side-table table { width: 100%; border-collapse: collapse; }
+            .side-table th, .side-table td { border: 1px solid #000; padding: 2px; text-align: center; font-size: 7px; }
+            
+            .docente-footer { margin-top: auto; display: flex; justify-content: space-between; padding-top: 20px; }
+            .docente-sig-box { border-top: 1px solid #000; width: 45%; text-align: center; padding-top: 5px; }
+        </style>
+        
+        <div class="docente-header">
+            <h1>PREFEITURA MUNICIPAL DA ESTÂNCIA DE CAMPOS DO JORDÃO</h1>
+            <h2>SECRETARIA MUNICIPAL DE EDUCAÇÃO - <?= esc($servidor->escola_local ?? 'UNIDADE ESCOLAR') ?></h2>
+            <div style="background: #f0f0f0; font-weight: bold; padding: 3px; border: 1px solid #000;">FOLHA DE FREQUÊNCIA</div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item"><span class="info-label">Professor:</span><strong><?= esc($servidor->nome) ?></strong></div>
+            <div class="info-item"><span class="info-label">RG:</span><?= esc($servidor->rg) ?></div>
+            <div class="info-item"><span class="info-label">MTR:</span><?= esc($servidor->matricula) ?></div>
+            
+            <div class="info-item"><span class="info-label">Situação:</span><?= esc($servidor->cargo_funcao) ?></div>
+            <div class="info-item"><span class="info-label">Jornada:</span>Básica</div>
+            <div class="info-item"><span class="info-label">C/H:</span><?= esc($servidor->ch_semanal) ?></div>
+            
+            <div class="info-item" style="grid-column: span 2;"><span class="info-label">Sede de Controle:</span><?= esc($servidor->escola_local) ?></div>
+            <div class="info-item"><span class="info-label">Mês/Ano:</span><?= $mes_nome ?> / <?= $ano ?></div>
+        </div>
+
+        <div class="main-content">
+            <div class="freq-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="width: 100px;">ASSINATURAS</th>
+                            <th colspan="2">DIAS</th>
+                            <th colspan="3">JORNADA UE LOCAL</th>
+                            <th colspan="4">AUSÊNCIAS</th>
+                        </tr>
+                        <tr>
+                            <th>Mês</th>
+                            <th>Sem</th>
+                            <th>Diária</th>
+                            <th>Subst</th>
+                            <th>Total</th>
+                            <th>H/A</th>
+                            <th>Local</th>
+                            <th>Outras</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($dias as $d): 
+                            $is_blocked = ($d['is_domingo'] || $d['is_sabado'] || $d['is_feriado'] || $d['is_ponto_facultativo']);
+                        ?>
+                        <tr>
+                            <td style="height: 15px;"><?= $is_blocked ? '****************' : '' ?></td>
+                            <td><?= str_pad($d['dia'], 2, '0', STR_PAD_LEFT) ?></td>
+                            <td><?= $d['semana'] ?></td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="side-tables">
+                <div class="side-table">
+                    <div class="side-table-title">HORÁRIO</div>
+                    <table>
+                        <tr><th>D</th><th>S</th><th>T</th><th>Q</th><th>Q</th><th>S</th><th>S</th></tr>
+                        <tr><td>M</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>T</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                    </table>
+                </div>
+                
+                <div class="side-table">
+                    <div class="side-table-title">RESUMO FINAL</div>
+                    <table style="text-align: left;">
+                        <tr><td>Jornada:</td><td style="width: 30px;"></td></tr>
+                        <tr><td>Projetos:</td><td></td></tr>
+                        <tr><td><strong>TOTAL:</strong></td><td></td></tr>
+                    </table>
+                </div>
+
+                <div class="side-table" style="flex: 1; min-height: 100px;">
+                    <div class="side-table-title">ANOTAÇÕES</div>
+                    <div style="padding: 5px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer" style="margin-top: 10px; min-height: 30px; border: 1px solid #000; padding: 2px;">
+            <strong>OBSERVAÇÕES:</strong>
+        </div>
+
+        <div class="docente-footer">
+            <div class="docente-sig-box">
+                <p>Oficial de Escola</p>
+            </div>
+            <div class="docente-sig-box">
+                <p>Diretor de Escola</p>
+            </div>
+        </div>
+    </div>
+
+    <?php else: ?>
+    <!-- LAYOUT APOIO -->
     <div class="page">
         <div class="header">
             <h1>PREFEITURA MUNICIPAL DA ESTÂNCIA DE CAMPOS DO JORDÃO/SP</h1>
@@ -316,6 +445,8 @@
             </div>
         </div>
     </div>
+    <?php endif; ?>
+
     <?php
 endforeach; ?>
 
