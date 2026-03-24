@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Folha de Ponto -
-        <?= esc($servidor->nome)?> -
         <?= $mes_numero?>/
         <?= $ano?>
     </title>
@@ -21,6 +20,19 @@
             padding: 0;
             color: #000;
             line-height: 1.3;
+        }
+
+        .page {
+            page-break-after: always;
+            padding: 10px;
+            position: relative;
+            min-height: 98vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page:last-child {
+            page-break-after: auto;
         }
 
         .header {
@@ -95,7 +107,7 @@
         th,
         td {
             border: 1px solid #000;
-            padding: 5.5px 4px;
+            padding: 4px 4px;
             text-align: center;
         }
 
@@ -140,11 +152,32 @@
             margin-top: 10px;
             border: 1px solid #000;
             padding: 5px;
-            min-height: 50px;
+            min-height: 40px;
         }
 
         .footer strong {
             font-size: 10px;
+        }
+
+        .signature-section {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            padding-right: 20px;
+        }
+
+        .signature-box {
+            border-top: 1px solid #000;
+            width: 250px;
+            text-align: center;
+            padding-top: 5px;
+            margin-top: 30px;
+        }
+
+        .signature-box p {
+            margin: 0;
+            font-size: 10px;
+            font-weight: bold;
         }
 
         .asterisks {
@@ -155,119 +188,136 @@
 </head>
 
 <body onload="window.print()">
-    <div class="header">
-        <h1>PREFEITURA MUNICIPAL DA ESTÂNCIA DE CAMPOS DO JORDÃO/SP</h1>
-        <h2>
-            <?= esc($servidor->secretaria ?? 'SECRETARIA MUNICIPAL DE EDUCAÇÃO')?>
-        </h2>
-        <h3>
-            <?= esc($servidor->escola_local ?? 'ESCOLA NÃO INFORMADA')?>
-        </h3>
-        <h3>REGISTRO DE PONTO - QUADRO DE APOIO</h3>
-    </div>
+    <?php foreach ($servidores as $servidor): ?>
+    <div class="page">
+        <div class="header">
+            <h1>PREFEITURA MUNICIPAL DA ESTÂNCIA DE CAMPOS DO JORDÃO/SP</h1>
+            <h2>
+                <?= esc($servidor->secretaria ?? 'SECRETARIA MUNICIPAL DE EDUCAÇÃO')?>
+            </h2>
+            <h3>
+                <?= esc($servidor->escola_local ?? 'ESCOLA NÃO INFORMADA')?>
+            </h3>
+            <h3>REGISTRO DE PONTO - QUADRO DE APOIO</h3>
+        </div>
 
-    <div class="competencia">
-        Mês:
-        <?= $mes_nome?> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; Ano:
-        <?= $ano?>
-    </div>
+        <div class="competencia">
+            Mês:
+            <?= $mes_nome?> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+            Ano:
+            <?= $ano?>
+        </div>
 
-    <div class="box-dados">
-        <div class="box-dados-title">DADOS DO SERVIDOR</div>
-        <div class="row">
-            <div class="item" style="flex:1"><strong>MATR.:</strong>
-                <?= esc($servidor->matricula)?>
+        <div class="box-dados">
+            <div class="box-dados-title">DADOS DO SERVIDOR</div>
+            <div class="row">
+                <div class="item" style="flex:1"><strong>MATR.:</strong>
+                    <?= esc($servidor->matricula)?>
+                </div>
+                <div class="item" style="flex:2"><strong>NOME:</strong>
+                    <?= esc($servidor->nome)?>
+                </div>
+                <div class="item" style="flex:1"><strong>RG:</strong>
+                    <?= esc($servidor->rg)?>
+                </div>
+                <div class="item" style="flex:2"><strong>CARGO/FUNÇÃO:</strong>
+                    <?= esc($servidor->cargo_funcao)?>
+                </div>
             </div>
-            <div class="item" style="flex:2"><strong>NOME:</strong>
-                <?= esc($servidor->nome)?>
-            </div>
-            <div class="item" style="flex:1"><strong>RG:</strong>
-                <?= esc($servidor->rg)?>
-            </div>
-            <div class="item" style="flex:2"><strong>CARGO/FUNÇÃO:</strong>
-                <?= esc($servidor->cargo_funcao)?>
+            <div class="row">
+                <div class="item" style="flex:1"><strong>HORÁRIO:</strong>
+                    <?= esc($servidor->horario_padrao)?>
+                </div>
+                <div class="item" style="flex:1"><strong>ALMOÇO:</strong>
+                    <?= esc($servidor->almoco)?>
+                </div>
+                <div class="item" style="flex:1"><strong>C. H. SEMANAL:</strong>
+                    <?= esc($servidor->ch_semanal)?>h
+                </div>
+                <div class="item" style="flex:1"><strong>PLANTÃO:</strong>
+                    <?= esc($servidor->plantao)?>
+                </div>
+                <div class="item" style="flex:1"><strong>ESTUDANTE:</strong>
+                    <?= esc($servidor->estudante)?>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="item" style="flex:1"><strong>HORÁRIO:</strong>
-                <?= esc($servidor->horario_padrao)?>
-            </div>
-            <div class="item" style="flex:1"><strong>ALMOÇO:</strong>
-                <?= esc($servidor->almoco)?>
-            </div>
-            <div class="item" style="flex:1"><strong>C. H. SEMANAL:</strong>
-                <?= esc($servidor->ch_semanal)?>h
-            </div>
-            <div class="item" style="flex:1"><strong>PLANTÃO:</strong>
-                <?= esc($servidor->plantao)?>
-            </div>
-            <div class="item" style="flex:1"><strong>ESTUDANTE:</strong>
-                <?= esc($servidor->estudante)?>
-            </div>
-        </div>
-    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th class="col-dia">DIA</th>
-                <th class="col-sem">SEM</th>
-                <th class="col-hora">ENTRADA</th>
-                <th class="col-hora">SAÍDA</th>
-                <th class="col-obs">OBSERVAÇÃO</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($dias as $d):
-    $tipo_dia = '';
-    $is_blocked = false;
-    if ($d['is_domingo']) {
-        $tipo_dia = 'DOMINGO';
-        $is_blocked = true;
-    }
-    else if ($d['is_sabado']) {
-        $tipo_dia = 'SÁBADO';
-        $is_blocked = true;
-    }
-    else if ($d['is_feriado']) {
-        $tipo_dia = 'FERIADO';
-        $is_blocked = true;
-    }
-    else if ($d['is_ponto_facultativo']) {
-        $tipo_dia = 'PONTO FACULTATIVO';
-        $is_blocked = true;
-    }
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-dia">DIA</th>
+                    <th class="col-sem">SEM</th>
+                    <th class="col-hora">ENTRADA</th>
+                    <th class="col-hora">SAÍDA</th>
+                    <th class="col-obs">OBSERVAÇÃO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($dias as $d):
+        $tipo_dia = '';
+        $is_blocked = false;
+        if ($d['is_domingo']) {
+            $tipo_dia = 'DOMINGO';
+            $is_blocked = true;
+        }
+        else if ($d['is_sabado']) {
+            $tipo_dia = 'SÁBADO';
+            $is_blocked = true;
+        }
+        else if ($d['is_feriado']) {
+            $tipo_dia = 'FERIADO';
+            $is_blocked = true;
+        }
+        else if ($d['is_ponto_facultativo']) {
+            $tipo_dia = 'PONTO FACULTATIVO';
+            $is_blocked = true;
+        }
 ?>
-            <tr class="<?= $is_blocked ? 'row-weekend' : ''?>">
-                <td>
-                    <?= $d['dia']?>
-                </td>
-                <td>
-                    <?= $d['semana']?>
-                </td>
+                <tr class="<?= $is_blocked ? 'row-weekend' : ''?>">
+                    <td>
+                        <?= $d['dia']?>
+                    </td>
+                    <td>
+                        <?= $d['semana']?>
+                    </td>
 
-                <?php if ($is_blocked): ?>
-                <td class="asterisks">***********************</td>
-                <td class="asterisks">***********************</td>
-                <td class="asterisks">
-                    <?= $tipo_dia?>
-                </td>
+                    <?php if ($is_blocked): ?>
+                    <td class="asterisks">***********************</td>
+                    <td class="asterisks">***********************</td>
+                    <td class="asterisks">
+                        <?= $tipo_dia?>
+                    </td>
+                    <?php
+        else: ?>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <?php
+        endif; ?>
+                </tr>
                 <?php
-    else: ?>
-                <td></td>
-                <td></td>
-                <td></td>
-                <?php
-    endif; ?>
-            </tr>
-            <?php
-endforeach; ?>
-        </tbody>
-    </table>
+    endforeach; ?>
+            </tbody>
+        </table>
 
-    <div class="footer">
-        <strong>OBSERVAÇÕES:</strong>
+        <div class="footer">
+            <strong>OBSERVAÇÕES:</strong>
+        </div>
+
+        <div class="signature-section">
+            <div class="signature-box">
+                <p>Diretor</p>
+                <p>(Assinatura e Carimbo)</p>
+            </div>
+            <div class="signature-box">
+                <p>Secretário</p>
+                <p>(Assinatura e Carimbo)</p>
+            </div>
+        </div>
     </div>
+    <?php
+endforeach; ?>
 
 </body>
 

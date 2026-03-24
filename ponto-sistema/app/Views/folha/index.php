@@ -12,6 +12,7 @@
             <label>Selecione o Servidor</label>
             <select name="servidor_id" class="form-control" required>
                 <option value="">-- Selecione --</option>
+                <option value="todos">TODOS OS SERVIDORES</option>
                 <?php foreach($servidores as $s): ?>
                     <option value="<?= $s->id ?>"><?= esc($s->nome) ?> (<?= esc($s->matricula) ?>)</option>
                 <?php endforeach; ?>
